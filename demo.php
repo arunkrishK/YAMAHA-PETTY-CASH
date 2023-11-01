@@ -1,5 +1,5 @@
 <!-----Welcome to demo page!!----->
-<!---commit the file--->
+<!---delete the file--->
 
 <?php
 include "connect.php";
