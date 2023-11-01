@@ -1,3 +1,6 @@
+<!-----Welcome to demo page!!----->
+
+
 <?php
 include "connect.php";
 
