@@ -1,5 +1,4 @@
-<!-----Welcome to demo page!!----->
-<!---delete the file--->
+<!----Checking Branch----->
 
 <?php
 include "connect.php";
