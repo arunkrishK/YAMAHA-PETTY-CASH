@@ -8,10 +8,9 @@ include "connect.php";
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Perform the deletion
-    $deleteQuery = "DELETE FROM customer_master WHERE ID = $id";
-    $result = mysqli_query($conn, $deleteQuery);
-
+   // Update the deleted column to 1 instead of deleting the record
+   $updateQuery = "UPDATE customer_master SET deleted = 1 WHERE ID = $id";
+   $result = mysqli_query($conn, $updateQuery);
     if ($result) {
         // Redirect back to the page displaying the table
         header("Location: cmsave.php");
@@ -320,8 +319,8 @@ i.fa-solid.fa-arrows-rotate {
                     <th>PHONE NUMBER</th>
                     <th>VEHICLE CODE</th>
                     <th>VEHICLE NAME</th>
-                    <th>FINANCIER CODE</th>
-                    <th>FINANCIER NAME</th>
+                    <!-- <th>FINANCIER CODE</th>
+                    <th>FINANCIER NAME</th> -->
 
                     <th>EDIT</th>
                     <th>DELETE</th>
@@ -330,7 +329,7 @@ i.fa-solid.fa-arrows-rotate {
             <tbody id="tableBody">
                 <?php
                 include "connect.php";
-                $sve = "SELECT * FROM customer_master";
+                $sve = "SELECT * FROM customer_master WHERE deleted = 0";
                 $ddd = mysqli_query($conn, $sve);
                 while ($row = mysqli_fetch_assoc($ddd)) {
                     $id = $row['ID'];
@@ -343,8 +342,8 @@ i.fa-solid.fa-arrows-rotate {
 
                     $vehiclecode = $row['VEHICLECODE'];
                     $vehiclename = $row['VEHICLENAME'];
-                    $financiercode = $row['FCODE'];
-                    $financiername = $row['FNAME'];
+                    // $financiercode = $row['FCODE'];
+                    // $financiername = $row['FNAME'];
                 ?>
                     <tr>
                         <td><?php echo $id ?></td>
@@ -357,8 +356,8 @@ i.fa-solid.fa-arrows-rotate {
 
                         <td><?php echo $vehiclecode ?></td>
                         <td><?php echo $vehiclename ?></td>
-                        <td><?php echo $financiercode ?></td>
-                        <td><?php echo $financiername ?></td>
+                        <!-- <td><php echo $financiercode ?></td>
+                        <td><php echo $financiername ?></td> -->
 
                         <td><a href="cmedit.php?id=<?php echo $row["ID"]; ?>" class=""
                                 role="button">

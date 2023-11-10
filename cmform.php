@@ -15,10 +15,11 @@ if(isset($_REQUEST['save'])){
     $vehiclecode = $_POST["vehicle_code"];
     $vehiclename = $_POST["vehicle_name"];
     $financiercode = $_POST["financier_code"];
-    $financiername = $_POST["financier_name"];    
+    $financiername = $_POST["financier_name"];  
+    $deleted = 0;  
     
-      $sql = "INSERT INTO `customer_master` (DATE, CUSTOMERCODE, CUSTOMERNAME, ADD1, ADD2, PHONE, VEHICLECODE, VEHICLENAME, FCODE, FNAME)
-      VALUES ('$date', '$customercode', '$customername', '$add1', '$add2', '$phone', '$vehiclecode', '$vehiclename', '$financiercode', '$financiername')";
+      $sql = "INSERT INTO `customer_master` (DATE, CUSTOMERCODE, CUSTOMERNAME, ADD1, ADD2, PHONE, VEHICLECODE, VEHICLENAME, FCODE, FNAME, deleted)
+      VALUES ('$date', '$customercode', '$customername', '$add1', '$add2', '$phone', '$vehiclecode', '$vehiclename', '$financiercode', '$financiername', '$deleted')";
     
 if ($conn->query($sql) === TRUE) {
   header("Location: cmsave.php");
@@ -216,15 +217,16 @@ if (isset($_POST['import-excel'])) {
             if (!$conn) {
                 die("Database connection failed: " . mysqli_connect_error());
             }
+            $deleted = 0;
 
             // Prepared statement to insert data into the 'customer_master' table
-            $stmt = $conn->prepare("INSERT INTO customer_master (DATE, CUSTOMERCODE, CUSTOMERNAME, ADD1, ADD2, PHONE, VEHICLECODE, VEHICLENAME, FCODE, FNAME) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO customer_master (DATE, CUSTOMERCODE, CUSTOMERNAME, ADD1, ADD2, PHONE, VEHICLECODE, VEHICLENAME, deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, $deleted)");
 
             // Bind parameters
-            $stmt->bind_param("ssssssssss", $date, $customercode, $customername, $add1, $add2, $phone, $vehiclecode, $vehiclename, $financiercode, $financiername);
+            $stmt->bind_param("ssssssss", $date, $customercode, $customername, $add1, $add2, $phone, $vehiclecode, $vehiclename);
 
             foreach ($data as $row) {
-                $date = $row[0];
+                $date = date('Y-m-d', strtotime($row['0']));
                 $customercode = $row[1];
                 $customername = $row[2];
                 $add1 = $row[3];
@@ -232,8 +234,7 @@ if (isset($_POST['import-excel'])) {
                 $phone = $row[5];
                 $vehiclecode = $row[6];
                 $vehiclename = $row[7];
-                $financiercode = $row[8];
-                $financiername = $row[9];
+                
 
                 if ($stmt->execute()) {
                     $msg = "File Imported Successfully!";
@@ -382,27 +383,7 @@ include "nav2.php";
           <input class="form-control" type="text" name="vehicle_name" required>
               </DIV></DIV> </DIV>
 
-              <div class="row">
-        <div class="col-4">
-          <div class="form-group">
-            <label>Financier Code</label>
-  </DIV></DIV>
-  <div class="col-4">
-          <div class="form-group">
-
-            <label>Financier Name</label>
-
-              </DIV></DIV>  </DIV>
-              <div class="row">
-        <div class="col-4">
-          <div class="form-group">
-          <input class="form-control" type="text" name="financier_code" id="financier_code" required>
-  </DIV></DIV>
-  <div class="col-4">
-          <div class="form-group">
-          <input class="form-control" type="text" name="financier_name" id="financier_name" required>
-              </DIV></DIV> </DIV>
-
+              
               <div class="form-group mt-4">
         <input type="Submit" value="SAVE" class="button2" name="save">
     </div>
