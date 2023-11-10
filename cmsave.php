@@ -64,7 +64,6 @@ background: linear-gradient(179deg, #46B8BC 34.05%, #1418A6 139.82%);
 .container
 {
    
-   
     width:82%;
    
 }
